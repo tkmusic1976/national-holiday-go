@@ -12,6 +12,6 @@ func main() {
 		panic(err)
 	}
 	for _, e := range entries {
-		fmt.Printf("%s = %s\n", e.YMD, e.Name)
+		fmt.Printf("%d/%02d/%02d\t%s\n", e.Year, e.Month, e.Day, e.Name)
 	}
 }

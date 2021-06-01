@@ -8,14 +8,19 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
 )
 
 type Entry struct {
-	YMD  string
-	Name string
+	YMD   string
+	Name  string
+	Year  int
+	Month int
+	Day   int
 }
 
 const csvURL = "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv"
@@ -45,7 +50,13 @@ func AllEntries() ([]Entry, error) {
 		if len(row) != 2 {
 			return nil, fmt.Errorf("想定外のデータに遭遇しました: 行%d = %v", i+1, row)
 		}
-		entries = append(entries, Entry{YMD: row[0], Name: row[1]})
+
+		ymd := strings.Split(row[0], "/")
+		year, _ := strconv.Atoi(ymd[0])
+		month, _ := strconv.Atoi(ymd[1])
+		day, _ := strconv.Atoi(ymd[2])
+
+		entries = append(entries, Entry{YMD: row[0], Name: row[1], Year: year, Month: month, Day: day})
 	}
 	return entries, nil
 }
